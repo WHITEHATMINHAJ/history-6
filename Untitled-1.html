@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Echoes of Empire</title>
+    <style>
+        /* ===== CSS RESET & VARIABLES ===== */
+        :root {
+            --primary: #8B4513;
+            --secondary: #D2691E;
+            --dark: #2c3e50;
+            --light: #f4f1ea;
+            --accent: #3498db;
+            --text: #333;
+            --text-light: #7f8c8d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+
+        body {
+            background-color: var(--light);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+
+        /* ===== TYPOGRAPHY ===== */
+        h1, h2, h3, h4 {
+            color: var(--dark);
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+        }
+
+        h2 {
+            font-size: 2rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--primary);
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 1.5rem;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .btn:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        .btn-secondary {
+            background: var(--accent);
+        }
+
+        .btn-secondary:hover {
+            background: #2980b9;
+        }
+
+        /* ===== NAVIGATION ===== */
+        nav {
+            background: linear-gradient(135deg, var(--dark), #4a6572);
+            color: white;
+            padding: 1rem 0;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #f39c12;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .nav-links li {
+            margin-left: 1.5rem;
+        }
+
+        .nav-links li a {
+            color: white;
+            text-decoration: none;
+            transition: color 0.3s;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+        }
+
+        .nav-links li a:hover {
+            color: #f39c12;
+            background: rgba(255,255,255,0.1);
+        }
+
+        /* ===== PAGE SECTIONS ===== */
+        .page {
+            display: none;
+            padding: 4rem 0;
+            min-height: 80vh;
+        }
+
+        .page.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* ===== HERO SECTION ===== */
+        .hero {
+            height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+                        url('https://images.unsplash.com/photo-1516546453174-5e1098a4b4af?ixlib=rb-1.2.1&auto=format&fit=crop&w=1950&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 0 20px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            color: white;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin-bottom: 2rem;
+        }
+
+        /* ===== EMPIRE GRID ===== */
+        .empires-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .empire-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .empire-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .empire-image {
+            height: 200px;
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .empire-content {
+            padding: 1.5rem;
+        }
+
+        .empire-content h3 {
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+
+        .empire-meta {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        /* ===== EMPIRE DETAIL PAGE ===== */
+        .empire-detail {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-bottom: 3rem;
+        }
+
+        .empire-header {
+            position: relative;
+            height: 400px;
+            overflow: hidden;
+        }
+
+        .empire-header-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .empire-header-content {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white;
+            padding: 2rem;
+        }
+
+        .empire-header-content h1 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .empire-info {
+            padding: 2rem;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .info-item {
+            margin-bottom: 1rem;
+        }
+
+        .info-item h3 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .empire-description {
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .empire-description p {
+            margin-bottom: 1rem;
+        }
+
+        /* ===== TIMELINE ===== */
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 3rem auto;
+        }
+
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 4px;
+            background: var(--accent);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            margin-left: -2px;
+        }
+
+        .timeline-item {
+            padding: 10px 40px;
+            position: relative;
+            width: 50%;
+            clear: both;
+        }
+
+        .timeline-item::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border: 4px solid var(--accent);
+            border-radius: 50%;
+            top: 15px;
+            right: -10px;
+            z-index: 1;
+        }
+
+        .left {
+            left: 0;
+        }
+
+        .right {
+            left: 50%;
+        }
+
+        .right::after {
+            left: -10px;
+        }
+
+        .timeline-content {
+            padding: 20px;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+        }
+
+        .timeline-date {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* ===== ABOUT SECTION ===== */
+        .about-content {
+            background: white;
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            margin-top: 2rem;
+        }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--dark);
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .nav-links {
+                margin-top: 1rem;
+                justify-content: center;
+            }
+
+            .nav-links li {
+                margin: 0 0.5rem;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .timeline::after {
+                left: 31px;
+            }
+
+            .timeline-item {
+                width: 100%;
+                padding-left: 70px;
+                padding-right: 25px;
+            }
+
+            .timeline-item::after {
+                left: 21px;
+            }
+
+            .left, .right {
+                left: 0;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            h2 {
+                font-size: 1.7rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="container nav-container">
+            <div class="logo">Echoes of Empire</div>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showPage('home')">Home</a></li>
+                <li><a href="#" onclick="showPage('empires')">Empires</a></li>
+                <li><a href="#" onclick="showPage('timeline')">Timeline</a></li>
+                <li><a href="#" onclick="showPage('about')">About</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <section id="home" class="page active">
+        <div class="hero">
+            <div class="container">
+                <h1>Echoes of Empire</h1>
+                <p>Journey through the rise and fall of history's greatest civilizations that shaped our world</p>
+                <a href="#" class="btn" onclick="showPage('empires')">Explore Empires</a>
+            </div>
+        </div>
+        
+        <div class="container">
+            <div class="about-content">
+                <h2>Discover History's Greatest Civilizations</h2>
+                <p>This interactive exploration takes you through the remarkable stories of empires that have left an indelible mark on human history. From the legal codes of Babylon to the architectural marvels of Rome, each empire contributed uniquely to our shared heritage.</p>
+                <p>Learn about their political structures, cultural achievements, military campaigns, and the lasting legacies that continue to influence our modern world.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Empires Page -->
+    <section id="empires" class="page">
+        <div class="container">
+            <h2>Historical Empires</h2>
+            <p>Click on any empire to learn more about its history, achievements, and legacy.</p>
+            
+            <div class="empires-grid">
+                <!-- Empire cards will be generated by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Empire Detail Pages -->
+    <section id="empire-detail" class="page">
+        <div class="container">
+            <button class="btn" onclick="showPage('empires')">← Back to Empires</button>
+            <div id="detail-content">
+                <!-- Empire detail content will be inserted by JavaScript -->
+            </div>
+        </div>
+    </section>
+
+    <!-- Timeline Page -->
+    <section id="timeline" class="page">
+        <div class="container">
+            <h2>Historical Timeline</h2>
+            <p>Major events in the development of web technologies and historical empires.</p>
+            
+            <div class="timeline">
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1989</div>
+                        <h3>Web Invention</h3>
+                        <p>Tim Berners-Lee invents the World Wide Web while working at CERN [citation:2].</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1990</div>
+                        <h3>First Web Browser</h3>
+                        <p>Tim Berners-Lee develops the first web browser on the NeXT computer [citation:2].</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1991</div>
+                        <h3>HTML Tags</h3>
+                        <p>First public description of HTML with 18 tags is released [citation:4].</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1994</div>
+                        <h3>CSS Concept</h3>
+                        <p>Håkon Wium Lie proposes CSS to style web pages [citation:6].</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1995</div>
+                        <h3>JavaScript Creation</h3>
+                        <p>Brendan Eich creates JavaScript in 10 days at Netscape [citation:1][citation:5].</p>
+                    </div>
+                </div>
+                
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <div class="timeline-date">1996</div>
+                        <h3>CSS Standardization</h3>
+                        <p>CSS becomes a W3C Recommendation [citation:6].</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Page -->
+    <section id="about" class="page">
+        <div class="container">
+            <h2>About This Project</h2>
+            
+            <div class="about-content">
+                <h3>Web Technologies Used</h3>
+                <p>This website demonstrates the core web technologies that power the modern internet:</p>
+                
+                <div class="info-grid">
+                    <div class="info-item">
+                        <h4>HTML</h4>
+                        <p>HTML (HyperText Markup Language) provides the structure and content of web pages. Originally developed by Tim Berners-Lee in the early 1990s, it has evolved through several versions [citation:2][citation:3].</p>
+                    </div>
+                    
+                    <div class="info-item">
+                        <h4>CSS</h4>
+                        <p>CSS (Cascading Style Sheets) controls the visual presentation of web content. First proposed by Håkon Wium Lie in 1994, it allows separation of content from design [citation:6][citation:3].</p>
+                    </div>
+                    
+                    <div class="info-item">
+                        <h4>JavaScript</h4>
+                        <p>JavaScript adds interactivity to web pages. Created by Brendan Eich in 1995, it has evolved from a simple scripting language to a powerful programming language used for both client-side and server-side development [citation:1][citation:5].</p>
+                    </div>
+                </div>
+                
+                <h3>How They Work Together</h3>
+                <p>These three technologies form the foundation of modern web development [citation:3][citation:8]:</p>
+                <ul>
+                    <li><strong>HTML</strong> creates the structure (like the frame of a building)</li>
+                    <li><strong>CSS</strong> adds styling (like the paint and decorations)</li>
+                    <li><strong>JavaScript</strong> enables interactivity (like the electrical and plumbing systems)</li>
+                </ul>
+                
+                <p>This separation of concerns allows developers to create rich, interactive web experiences that work across different devices and platforms.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>Echoes of Empire &copy; 2025 | Exploring Historical Civilizations</p>
+            <p>Educational Project for Learning Web Technologies</p>
+        </div>
+    </footer>
+
+    <script>
+        // Empire data
+        const empires = [
+            {
+                id: 'roman',
+                name: 'Roman Empire',
+                period: '27 BC - 476 AD',
+                region: 'Europe, North Africa, Middle East',
+                image: 'https://images.unsplash.com/photo-1552832230-c0197dd311b5?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                capital: 'Rome, Constantinople',
+                languages: 'Latin, Greek',
+                government: 'Autocracy',
+                area: '5 million km² (117 AD)',
+                description: `
+                    <p>The Roman Empire was the post-Republican period of ancient Rome. As a polity, it included large territorial holdings around the Mediterranean Sea in Europe, North Africa, and Western Asia, ruled by emperors.</p>
+                    <p>From the accession of Caesar Augustus to the military anarchy of the 3rd century, it was a principate with Italy as metropole of the provinces and the city of Rome as sole capital. The Roman Empire was among the most powerful economic, cultural, political and military forces in the world of its time.</p>
+                    <p>It was one of the largest empires in world history. At its height under Trajan, it covered 5 million square kilometers. The Roman legacy has deeply influenced Western civilization, shaping modern law, government, architecture, and language.</p>
+                `
+            },
+            {
+                id: 'rashidun',
+                name: 'Rashidun Caliphate',
+                period: '632 - 661 AD',
+                region: 'Arabian Peninsula, Levant, Persia',
+                image: 'https://images.unsplash.com/photo-1580554530778-ca17c5e8c2c9?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                capital: 'Medina, Kufa',
+                languages: 'Arabic',
+                government: 'Caliphate',
+                area: '6.4 million km² (655 AD)',
+                description: `
+                    <p>The Rashidun Caliphate was the first caliphate to succeed the Islamic prophet Muhammad. It was ruled by the first four successive caliphs (successors) of Muhammad after his death in 632 CE.</p>
+                    <p>These caliphs are collectively known in Sunni Islam as the Rashidun, or "Rightly Guided" caliphs. The caliphate of the Rashidun spanned from 632 to 661 CE, during which the empire expanded rapidly beyond the Arabian Peninsula.</p>
+                    <p>At its peak, the Rashidun Caliphate extended from the Arabian Peninsula to the Levant, Caucasus, North Africa, and the Iranian Plateau. The period saw the compilation of the Quran in its modern form and the establishment of Islamic law.</p>
+                `
+            },
+            {
+                id: 'byzantine',
+                name: 'Byzantine Empire',
+                period: '330 - 1453 AD',
+                region: 'Eastern Mediterranean',
+                image: 'https://images.unsplash.com/photo-1642678479255-6889912f6b7b?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                capital: 'Constantinople',
+                languages: 'Greek, Latin',
+                government: 'Autocracy',
+                area: '2.7 million km² (555 AD)',
+                description: `
+                    <p>The Byzantine Empire, also referred to as the Eastern Roman Empire, was the continuation of the Roman Empire in its eastern provinces during Late Antiquity and the Middle Ages.</p>
+                    <p>It survived the fragmentation and fall of the Western Roman Empire in the 5th century AD and continued to exist for an additional thousand years until the Fall of Constantinople to the Ottoman Empire in 1453.</p>
+                    <p>During most of its existence, the empire was the most powerful economic, cultural, and military force in Europe. The terms "Byzantine Empire" and "Eastern Roman Empire" were created after the end of the realm; its citizens continued to refer to their empire as the Roman Empire and to themselves as Romans.</p>
+                `
+            },
+            {
+                id: 'ottoman',
+                name: 'Ottoman Empire',
+                period: '1299 - 1922 AD',
+                region: 'Southeast Europe, Western Asia, North Africa',
+                image: 'https://images.unsplash.com/photo-1587059326974-1c2b46652a65?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                capital: 'Söğüt, Bursa, Edirne, Constantinople',
+                languages: 'Ottoman Turkish',
+                government: 'Absolute monarchy, Caliphate',
+                area: '5.2 million km² (1683 AD)',
+                description: `
+                    <p>The Ottoman Empire was one of the longest-lasting empires in history, controlling vast territories across three continents for over 600 years.</p>
+                    <p>Founded at the end of the 13th century in northwestern Anatolia by the Turkoman tribal leader Osman I, the empire reached its peak under Suleiman the Magnificent in the 16th century.</p>
+                    <p>At its height, the Ottoman Empire spanned Southeast Europe, Western Asia, and North Africa. It contained 29 provinces and numerous vassal states, with Constantinople (modern-day Istanbul) as its capital.</p>
+                `
+            },
+            {
+                id: 'mongol',
+                name: 'Mongol Empire',
+                period: '1206 - 1368 AD',
+                region: 'Asia, Eastern Europe',
+                image: 'https://images.unsplash.com/photo-1542662565-7e0b506b96cf?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                capital: 'Avarga, Karakorum, Khanbaliq',
+                languages: 'Mongolian, Turkic languages',
+                government: 'Elective monarchy',
+                area: '24 million km² (1279 AD)',
+                description: `
+                    <p>The Mongol Empire was the largest contiguous land empire in history, stretching from Eastern Europe to the Sea of Japan.</p>
+                    <p>Originating in the Mongol heartland in the Steppe of central Asia, the empire eventually stretched from Central Europe to the Sea of Japan, extending northward into parts of the Arctic; eastward and southward into the Indian subcontinent, Mainland Southeast Asia and the Iranian Plateau; and westward as far as the Levant and the Carpathian Mountains.</p>
+                    <p>The empire unified the nomadic Mongol and Turkic tribes of historical Mongolia under the leadership of Genghis Khan, who was proclaimed ruler of all Mongols in 1206.</p>
+                `
+            },
+            {
+                id: 'persian',
+                name: 'Persian Empire',
+                period: '550 - 330 BC',
+                region: 'Middle East, Central Asia',
+                image: 'https://images.unsplash.com/photo-1598974352665-27d050a3547e?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+                capital: 'Pasargadae, Babylon, Susa, Persepolis',
+                languages: 'Old Persian, Aramaic, Akkadian',
+                government: 'Monarchy',
+                area: '5.5 million km² (500 BC)',
+                description: `
+                    <p>The Persian Empire, also known as the Achaemenid Empire, was one of the most powerful empires of the ancient world, known for its efficient administration and cultural achievements.</p>
+                    <p>Founded by Cyrus the Great, the empire is noted for its model of a centralized, bureaucratic administration, its multicultural policy, building infrastructure such as road systems and a postal system, and the use of an official language across its territories.</p>
+                    <p>The empire had an immense impact on the development of world civilization, including the spread of Zoroastrianism as a world religion and influences on law, government, and administration that would later be adopted by other empires.</p>
+                `
+            }
+        ];
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            generateEmpireCards();
+        });
+
+        // Function to show specific page and hide others
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Show the requested page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Scroll to top
+            window.scrollTo(0, 0);
+        }
+
+        // Function to generate empire cards
+        function generateEmpireCards() {
+            const grid = document.querySelector('.empires-grid');
+            
+            empires.forEach(empire => {
+                const card = document.createElement('div');
+                card.className = 'empire-card';
+                card.innerHTML = `
+                    <img src="${empire.image}" alt="${empire.name}" class="empire-image">
+                    <div class="empire-content">
+                        <h3>${empire.name}</h3>
+                        <div class="empire-meta">${empire.period} | ${empire.region}</div>
+                        <p>${empire.description.substring(0, 150)}...</p>
+                        <button class="btn btn-secondary" onclick="showEmpireDetail('${empire.id}')">Learn More</button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // Function to show empire detail page
+        function showEmpireDetail(empireId) {
+            const empire = empires.find(e => e.id === empireId);
+            
+            if (!empire) return;
+            
+            const detailContent = document.getElementById('detail-content');
+            detailContent.innerHTML = `
+                <div class="empire-detail">
+                    <div class="empire-header">
+                        <img src="${empire.image}" alt="${empire.name}" class="empire-header-image">
+                        <div class="empire-header-content">
+                            <h1>${empire.name}</h1>
+                            <p>${empire.period}</p>
+                        </div>
+                    </div>
+                    <div class="empire-info">
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <h3>Capital</h3>
+                                <p>${empire.capital}</p>
+                            </div>
+                            <div class="info-item">
+                                <h3>Official Languages</h3>
+                                <p>${empire.languages}</p>
+                            </div>
+                            <div class="info-item">
+                                <h3>Government</h3>
+                                <p>${empire.government}</p>
+                            </div>
+                            <div class="info-item">
+                                <h3>Area</h3>
+                                <p>${empire.area}</p>
+                            </div>
+                        </div>
+                        <div class="empire-description">
+                            ${empire.description}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            showPage('empire-detail');
+        }
+    </script>
+</body>
+</html>
